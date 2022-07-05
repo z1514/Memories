@@ -7,13 +7,16 @@ import postRoutes from './routes/posts.js';
 
 const app = express();
 
-// forward posts to router middleware
-app.use('/posts', postRoutes);
+
 // parse json and urlencoded
 app.use(bodyParser.json({limit:"30mb", extended: true}));
 app.use(bodyParser.urlencoded({limit:"30mb", extended: true}));
 // cors request
 app.use(cors());
+
+// forward posts to router middleware
+// should below the cors because of the order
+app.use('/posts', postRoutes);
 
 //mongo db
 const CONNECTION_URL = 'mongodb+srv://admin:PKiKJ5LwdRFYyuL@cluster0.9cxlb.mongodb.net/?retryWrites=true&w=majority';
