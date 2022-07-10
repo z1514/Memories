@@ -1,6 +1,9 @@
 import express from 'express';
 
-import { getPosts, createPost, updatePost, deletePost, likePost} from '../controllers/posts.js';
+import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
 
 //localhost:5000/posts
@@ -9,15 +12,16 @@ const router = express.Router();
 router.get('/', getPosts);
 
 //create the posts
-router.post('/', createPost);
+router.post('/', auth, createPost);
 
 // update the post
-router.patch('/:id', updatePost);
+// the front end won't show the posts not yours
+router.patch('/:id', auth, updatePost);
 
 // delete the post
-router.delete('/:id', deletePost);
+router.delete('/:id', auth, deletePost);
 
 // add likes
-router.patch('/:id/likePost', likePost);
+router.patch('/:id/likePost', auth, likePost);
 
 export default router;

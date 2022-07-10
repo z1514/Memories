@@ -8,28 +8,40 @@ import LockOutLinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './Input';
 import { useState } from 'react';
+import { signup, signin} from '../../actions/auth';
+
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 export const Auth = () => {
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
 
     const [isSignup, setIsSignup] = useState(false);
+    const [formData, setFormData] = useState(initialState);
+
     const dispatch = useDispatch();
     const history = useHistory();
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();//prevent default refresh
 
+        console.log(formData);
+        if(isSignup){
+            dispatch(signup(formData, history));
+        } else{
+            dispatch(signin(formData, history));
+        }
     };
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.name]:e.target.value}); //textField
     };
 
     const switchMode = () => {
         setIsSignup((prevSignup) => !prevSignup);
-        handleShowPassword(false);
+        setShowPassword(false);
     }
 
     const googleSuccess = async (res) => {
@@ -63,7 +75,7 @@ export const Auth = () => {
                             isSignup && (
                                 <>
                                     <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half/>
-                                    <Input name="firstName" label="First Name" handleChange={handleChange} half/>
+                                    <Input name="lastName" label="Last Name" handleChange={handleChange} half/>
                                 </>
                             )
                         }

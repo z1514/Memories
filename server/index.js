@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import postRoutes from './routes/posts.js';
+import userRoutes from './routes/users.js';
 
 const app = express();
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(cors());
 // forward posts to router middleware
 // should below the cors because of the order
 app.use('/posts', postRoutes);
+app.use('/user', userRoutes);
 
 //mongo db
 //set the .env
