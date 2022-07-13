@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+import { getPostsBySearch, getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
 
 import auth from '../middleware/auth.js';
 
@@ -8,6 +8,10 @@ const router = express.Router();
 
 //localhost:5000/posts
 //seperate the logics and routers
+
+//get the search posts
+router.get('/search', getPostsBySearch);
+
 //get the posts
 router.get('/', getPosts);
 

@@ -1,12 +1,35 @@
 import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
 export const getPosts = async (req, res) => {
-    try {
-        const postMessages = await PostMessage.find();
+    const { page } = req.query;
 
-        console.log(postMessages);
+    try {
+        const LIMIT = 8;
+        const startIndex = (Number(page) - 1) * LIMIT; //get the starting index of the page
+        const total = await PostMessage.countDocuments({});
+
+        const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+
+        // console.log(postMessages);
         //return the result
-        res.status(200).json(postMessages);
+        res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+//QUERY -> /posts?page=1 -> page = 1
+//PARAMS -> /posts/123 -> id = 123
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags } = req.query;
+
+    try {
+        const title = new RegExp(searchQuery, 'i'); //easier to search the mongoose
+
+        const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(',') } }] });
+
+        res.json({ data: posts });
+
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -15,7 +38,7 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
     const post = req.body;
 
-    const newPost = new PostMessage({...post, creator: req.userId, createdAt: new Date().toISOString()});
+    const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
     try {
         await newPost.save();
 
@@ -58,14 +81,14 @@ export const likePost = async (req, res) => {
 
     const post = await PostMessage.findById(id);
 
-    const index = post.likes.findIndex((id) => id===String(req.userId)); //check whether it is checked?
+    const index = post.likes.findIndex((id) => id === String(req.userId)); //check whether it is checked?
 
-    if(index === -1){
+    if (index === -1) {
         //like
         post.likes.push(req.userId);
-    }else{
+    } else {
         //unlike
-        post.likes = post.likes.filter((id) => id!== String(req.userId));
+        post.likes = post.likes.filter((id) => id !== String(req.userId));
     }
 
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true }); //return the result
