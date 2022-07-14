@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getPostsBySearch, getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+import { getPostsBySearch, getPosts, getPost, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
 
 import auth from '../middleware/auth.js';
 
@@ -14,6 +14,9 @@ router.get('/search', getPostsBySearch);
 
 //get the posts
 router.get('/', getPosts);
+
+//get the post
+router.get('/:id', getPost);
 
 //create the posts
 router.post('/', auth, createPost);

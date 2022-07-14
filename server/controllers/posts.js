@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
+
 export const getPosts = async (req, res) => {
     const { page } = req.query;
 
@@ -12,7 +13,7 @@ export const getPosts = async (req, res) => {
 
         // console.log(postMessages);
         //return the result
-        res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
+        res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT) });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -30,6 +31,18 @@ export const getPostsBySearch = async (req, res) => {
 
         res.json({ data: posts });
 
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getPost = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const post = await PostMessage.findById(id);
+
+        res.status(200).json(post);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
