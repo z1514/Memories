@@ -20,6 +20,10 @@ app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
 
+app.get('/', (req,res) => {
+    res.send("APP IS RUNNING");
+});
+
 //mongo db
 //set the .env
 const PORT = process.env.PORT || 5000;

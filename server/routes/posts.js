@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getPostsBySearch, getPosts, getPost, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+import { commentPost, getPostsBySearch, getPosts, getPost, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
 
 import auth from '../middleware/auth.js';
 
@@ -30,5 +30,8 @@ router.delete('/:id', auth, deletePost);
 
 // add likes
 router.patch('/:id/likePost', auth, likePost);
+
+// add comments
+router.post('/:id/commentPost', auth, commentPost);
 
 export default router;
