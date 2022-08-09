@@ -1,6 +1,12 @@
 # Memories
 A course project of multi user social media application. Users can post blogs, comment blogs and like blogs in Memories.
 
+## Table of contents
+* [Techniques](#techniques)
+* [Background and Features](#background-and-features)
+* [Development Environment Setup](#development-environment-setup)
+* [TODO](#todo)
+
 ## Techniques
 - NodeJS
 - Express
